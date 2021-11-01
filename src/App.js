@@ -34,8 +34,6 @@ export default App;
 const S = {};
 
 S.AppContainer = styled.div`
-  position: relative;
-
   .deals-body {
     max-width: 1700px;
     margin: 0 auto;
