@@ -1,6 +1,6 @@
 ## Product Comparison React Website
 
-An app that users compare broadband deals, built with React, Redux and Styled-Components.
+An app that lets users compare broadband deals, built with React, Redux and Styled-Components.
 
 ## How to run this project?
 
