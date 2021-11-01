@@ -1,58 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React from "react";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+import axios from "axios";
+import BroadbandTablePlans from "./components/BroadbandTablePlans";
+import { getDeals } from "./utils/api";
+import Drawer from "./components/Drawer";
+import { comparisonItems } from "../src/slices/compareSlice";
+import useFetch from "./utils/useFetch";
 
 function App() {
+  const comparison = useSelector(comparisonItems);
+  let source = axios.CancelToken.source();
+  const { data, isLoading, isError, error } = useFetch(() => getDeals(source.token), source);
+
+  if (isError) {
+    return <p>Ooops, we'll be back online soon</p>;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <S.AppContainer>
+      <div className="deals-body">
+        <div className="deals-inner">
+          <BroadbandTablePlans deals={data} />
+        </div>
+      </div>
+      {comparison.length > 0 && <Drawer />}
+    </S.AppContainer>
   );
 }
 
 export default App;
+
+const S = {};
+
+S.AppContainer = styled.div`
+  position: relative;
+
+  .deals-body {
+    max-width: 1700px;
+    margin: 0 auto;
+  }
+
+  .deals-inner {
+    margin-top: 40px;
+  }
+`;
